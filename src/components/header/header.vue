@@ -24,7 +24,12 @@
         <i class="icon-thumb_up"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper"></div>
+    <div class="bulletin-wrapper">
+      <span class="bulletin-title"></span><span class="bulletin-text ">{{seller.bulletin}}</span>
+    </div>
+    <div class="background">
+      <img :src="seller.avatar" width="100%" height="100%">
+    </div>
   </div>
 </template>
 
@@ -44,8 +49,11 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   .headers
+    background-color: rgba(7,17,27,0.4)
+    position relative
     color: #fff
-    background #000
+    overflow hidden
+    /*background #aaa*/
     .content-wapper
       position relative
       padding 24px 12px 18px 24px
@@ -106,8 +114,9 @@
         right 12px
         bottom 18px
         padding: 0 8px
+        width: 24px
         height: 24px
-        line-height 12px
+        line-height 24px
         border-radius 14px
         background rgba(0,0,0,0.2)
         text-align center
@@ -115,4 +124,35 @@
           font-size 10px
           .icon-thumb_up
               font-size 10px
+    .bulletin-wrapper
+      /*font-size 0*/
+      height: 28px
+      line-height 28px
+      padding-left 12px
+      padding-right 22px
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
+      background rgba(7,17,27,0.2)
+      .bulletin-title
+        display inline-block
+        width: 22px
+        height 12px
+        bg-image('bulletin')
+        background-size 100% 100%
+        background-repeat no-repeat
+      .bulletin-text
+        font-size 12px
+        display inline-block
+        margin 0 4px
+        vertical-align top
+
+    .background
+      position absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      z-index -1
+      filter blur(10px)
 </style>

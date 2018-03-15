@@ -19,7 +19,7 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count">{{seller.supports.length}}</span>
         <i class="icon-thumb_up"></i>
       </div>
@@ -30,26 +30,46 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+         <h1 class="name">{{seller.name}}</h1>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-      props: {
-        seller: {
-          type: Object
-        }
-      },
-      created() {
-        this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+    props: {
+      seller: {
+        type: Object
       }
+    },
+    data() {
+      return {
+        detailShow: false
+      };
+    },
+    methods: {
+      showDetail() {
+        this.detailShow = true;
+      }
+    },
+    created() {
+      this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+    }
   };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   .headers
-    background-color: rgba(7,17,27,0.4)
+    background-color: rgba(7, 17, 27, 0.4)
     position relative
     color: #fff
     overflow hidden
@@ -62,7 +82,7 @@
         display inline-block
         vertical-align top
         img
-         border-radius 2px
+          border-radius 2px
       .content
         display inline-block
         margin-left 16px
@@ -74,13 +94,13 @@
             width: 30px
             height: 18px
             bg-image("brand")
-            background-size :30px 18px
-            background-repeat :no-repeat
+            background-size: 30px 18px
+            background-repeat: no-repeat
           .name
-             margin-left 6px
-             font-size 16px
-             line-height 18px
-             font-weight:700
+            margin-left 6px
+            font-size 16px
+            line-height 18px
+            font-weight: 700
         .description
           margin-bottom 10px
           line-height 12px
@@ -99,7 +119,7 @@
             &.discount
               bg-image('discount_1')
             &.guarantee
-               bg-image('guarantee_1')
+              bg-image('guarantee_1')
             &.invoice
               bg-image('invoice_1')
             &.special
@@ -118,12 +138,12 @@
         height: 24px
         line-height 24px
         border-radius 14px
-        background rgba(0,0,0,0.2)
+        background rgba(0, 0, 0, 0.2)
         text-align center
         .count
           font-size 10px
           .icon-thumb_up
-              font-size 10px
+            font-size 10px
     .bulletin-wrapper
       /*font-size 0*/
       height: 28px
@@ -133,7 +153,7 @@
       white-space nowrap
       overflow hidden
       text-overflow ellipsis
-      background rgba(7,17,27,0.2)
+      background rgba(7, 17, 27, 0.2)
       .bulletin-title
         display inline-block
         width: 22px
@@ -155,4 +175,31 @@
       height: 100%
       z-index -1
       filter blur(10px)
+    .detail
+      position fixed
+      z-index 100
+      top 0
+      left: 0
+      width: 100%
+      height: 100%
+      overflow auto
+      background rgba(7, 17, 27, 0.8)
+      .detail-wrapper
+        min-height: 100%
+        width 100%
+        .detail-main
+          margin-top 64px
+          padding-bottom 64px
+          .name
+            line-height 16px
+            text-align center
+            font-size 16px
+            font-weight 700
+      .detail-close
+        position relative
+        width 32px
+        height 32px
+        margin -64px auto 0
+        clear: both
+        font-size 32px
 </style>

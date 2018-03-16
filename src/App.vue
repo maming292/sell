@@ -18,7 +18,7 @@
 </template>
 <script type="text/ecmascript-6">
   import headers from './components/header/header.vue';
-  let ERR_OK = 0;
+  const ERR_OK = 0;
   export default {
     data() {
       return {
@@ -28,9 +28,9 @@
     created() {
       this.$http.get('/api/seller').then((response) => {
         response = response.body;
+        // console.log(response.data);
         if (response !== ERR_OK) {
           this.seller = response.data;
-          console.log(this.seller);
         }
       });
     },

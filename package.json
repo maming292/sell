@@ -5,9 +5,8 @@
   "author": "maming292@163.com <mm631009382>",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --env development",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },

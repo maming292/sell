@@ -66,7 +66,6 @@
     </transition>
   </div>
 </template>
-
 <script>
   import star from '../star/star.vue';
 

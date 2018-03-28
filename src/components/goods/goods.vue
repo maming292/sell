@@ -38,7 +38,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcart>
+    <shopcart :selectfoods="selectfoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -60,6 +60,17 @@
      };
     },
     computed: {
+      selectfoods() {
+        let foods = [];
+        this.goods.forEach(function (good) {
+          good.foods.forEach(function (food) {
+            if (food.conut) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
+      },
       currentIndex() {
         for (let i = 0; i < this.listHeight.length; i++) {
           let height1 = this.listHeight[i];

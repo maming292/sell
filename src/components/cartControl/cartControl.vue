@@ -46,6 +46,15 @@
 <style lang="stylus" rel="stylesheet/stylus">
   .cartcontrol
     font-size 0
+    .move-enter-active
+      animation: bounce-in .5s;
+    .move-leave-active
+      animation: bounce-in .5s reverse;
+    //  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+   // .move-enter,.move-leave
+   //   transform: translateX(60px);
+   //   transform: rotate(180deg);
+   //   opacity 0
     .cart-add, .cart-decrease
       display inline-block
       padding 6px
@@ -63,4 +72,20 @@
       color rgb(147, 153, 159)
     .cart-add
       display inline-block
+  @keyframes bounce-in {
+    0% {
+      opacity 0;
+      translateX(0);
+      transform: rotate(0deg);
+    }
+    50%{
+      opacity 0.4;
+      transform: rotate(100deg) translateX(40deg);
+    }
+    100% {
+      opacity 1;
+      translateX(60px);
+      transform: rotate(180deg);
+    }
+  }
 </style>

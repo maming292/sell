@@ -38,7 +38,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :selectfoods="selectfoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcart>
+    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"></shopcart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -60,11 +60,11 @@
      };
     },
     computed: {
-      selectfoods() {
+      selectFoods() {
         let foods = [];
         this.goods.forEach(function (good) {
           good.foods.forEach(function (food) {
-            if (food.conut) {
+            if (food.count) {
               foods.push(food);
             }
           });

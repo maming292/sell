@@ -10,16 +10,10 @@
 
 <script type="text/ecmascript-6">
   import Vue from 'vue';
-
   export default {
     props: {
       food: {
         type: Object
-//        default() {
-//          return {
-//            count: 2
-//          };
-//        }
       }
     },
     methods: {
@@ -35,6 +29,9 @@
       },
       decreaseCart(event) {
         if (!event._constructed) {
+          return;
+        }
+        if (this.food.count <= 0) {
           return;
         }
         this.food.count--;

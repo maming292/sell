@@ -35,8 +35,8 @@
         default() {
           return [
             {
-              price: 10,
-              count: 2
+              price: 0,
+              count: 0
             }
           ];
         }
@@ -59,7 +59,7 @@
       },
       payDesc() {
         if (this.totalPrice === 0) {
-          return `￥${this.minPrice}元起送`;
+          return `￥${this.minprice}元起送`;
         } else if (this.totalPrice < this.minprice) {
           let diff = this.minprice - this.totalPrice;
           return `还差￥${diff}元起送`;

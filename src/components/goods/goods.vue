@@ -30,7 +30,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food"  @adds="drop"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -38,7 +38,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"></shopcart>
+    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"  ref="shopcart"></shopcart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -97,6 +97,10 @@
       });
     },
     methods: {
+      drop(e) {
+//        console.log(this.$refs['shopcart']);
+        this.$refs.shopcart.drop(e.target);
+      },
       selectMenu(index, event) {
         if (!event._constructed) {
           return;

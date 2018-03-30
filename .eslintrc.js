@@ -28,6 +28,7 @@ module.exports = {
     'semi':['error','always'],
     'indent':0,
     'space-before-function-paren': 0,
-    "no-whitespace-before-property": "off"
+    "no-whitespace-before-property": "off",
+    'vue/no-side-effects-in-computed-properties': 'off'
   }
 };

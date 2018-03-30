@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
+      <div class="content-left" @click="toggleList">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount > 0}">
             <i class="icon-shopping_cart" :class="{'highlight':totalCount > 0}"></i>
@@ -26,9 +26,32 @@
         </transition>
       </template>
     </div>
+    <transition name="fold">
+      <div class="shopcart-list" v-show="listShow">
+      <div class="list-header">
+        <h1 class="title">购物车</h1>
+        <span class="empty">清空</span>
+      </div>
+      <div class="list-content" ref="listcontent">
+        <ul>
+          <li class="food" v-for="(food,id) in selectFoods" :key="id">
+            <span class="name">{{food.name}}</span>
+            <div class="price">
+              <span>￥{{food.price*food.count}}</span>
+            </div>
+            <div class="cartcontrol-wrapper">
+              <cartcontrol :food="food"></cartcontrol>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    </transition>
   </div>
 </template>
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll';
+  import cartcontrol from '../cartControl/cartControl.vue';
   export default {
     props: {
       deliveryprice: {
@@ -60,10 +83,30 @@
           {show: false},
           {show: false}
         ],
-        dropBalls: []
+        dropBalls: [],
+        fold: true
       };
     },
     computed: {
+      listShow() {
+        if (!this.totalCount) {
+          this.fold = true;
+          return false;
+        }
+        let show = !this.fold;
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.listcontent, {
+                click: true
+              });
+            } else {
+              this.scroll.refresh();
+            }
+          });
+        }
+        return show;
+      },
       totalPrice() {
         let total = 0;
         this.selectFoods.forEach((food) => {
@@ -97,6 +140,12 @@
       }
     },
     methods: {
+      toggleList() {
+        if (!this.totalCount) {
+          return;
+        }
+        this.fold = !this.fold;
+      },
       drop(el) {
 //        console.log(el);
         for (let i = 0; i < this.balls.length; i++) {
@@ -130,7 +179,8 @@
         }
       },
       enter(el) {
-        // let rf = el.offsetHeight;
+        /* eslint-disable no-unused-vars */
+         let rf = el.offsetHeight;
         this.$nextTick(() => {
           el.style.webkitTtansform = 'translate3d(0,0,0)';
           el.style.transform = 'translate3d(0,0,0)';
@@ -148,10 +198,14 @@
           el.style.display = 'none';
         }
       }
+    },
+    components: {
+      cartcontrol
     }
   };
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixin.styl"
   .shopcart
     position fixed
     bottom: 0
@@ -244,18 +298,69 @@
           &.enough
             background #00b43c
             color #fff
-.ball-container
-  .ball
-    position fixed
-    left 32px
-    bottom 22px
-    z-index: 200
-    background #f00
-    transition: all 5.4s cubic-bezier(.49, -0.29, .75, .41)
-    .inner
-      width 16px
-      height 16px
-      border-radius 50%
-      background rgb(0, 160, 220)
-      transition: all 5.4s linear
+    .ball-container
+      .ball
+        position fixed
+        left 32px
+        bottom 22px
+        z-index: 200
+        transition: all 0.8s cubic-bezier(.49, -0.29, .75, .41)
+        .inner
+          width 16px
+          height 16px
+          border-radius 50%
+          background rgb(0, 160, 220)
+          transition: all 0.8s linear
+    .shopcart-list
+      position absolute
+      top: 0
+      left 0
+      z-index -1
+      width 100%
+      transition all 0.5s
+      transform translate3d(0,-100%,0)
+      background rgba(7,17,27,0.3)
+      &.fold-enter,&.fold-leave-active
+        transform translate3d(0,0,0)
+      .list-header
+        height 40px
+        line-height 40px
+        padding 0 18px
+        background #f3f5f7
+        border-bottom 1px solid rgba(7,17,27,0.1)
+        .title
+          float: left
+          font-size 14px
+          color rgb(7,17,27)
+        .empty
+          float right
+          font-size 12px
+          color rgb(0,160,220)
+
+      .list-content
+        padding 0 18px
+        max-height 217px
+        background #fff
+        overflow hidden
+        .food
+          position relative
+          padding 12px
+          box-sizing border-box
+          border-1px(rgba(7,17,27,0.1))
+          .name
+            line-height: 24px
+            font-size 14px
+            color: rgb(7,17,27)
+          .price
+            position absolute
+            right 90px
+            bottom 12px
+            font-size: 14px
+            line-height 24px
+            font-weight 700
+            color rgb(240,20,20)
+          .cartcontrol-wrapper
+            position absolute
+            right:6px
+            bottom 6px
 </style>

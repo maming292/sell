@@ -11,7 +11,7 @@
         <div class="price" :class="{'highlight':totalPrice > 0}">￥{{totalPrice}}</div>
         <div class="desc">另需配送费{{deliveryprice}}￥</div>
       </div>
-      <div class="content-right">
+      <div class="content-right" @click="pay">
         <div class="pay" :class="payClass">
           {{payDesc}}
         </div>
@@ -26,11 +26,14 @@
         </transition>
       </template>
     </div>
+    <transition name="fade">
+      <div class="list-mask" v-show="listShow" @click="hideList"></div>
+    </transition>
     <transition name="fold">
       <div class="shopcart-list" v-show="listShow">
       <div class="list-header">
         <h1 class="title">购物车</h1>
-        <span class="empty">清空</span>
+        <span class="empty" @click="empty">清空</span>
       </div>
       <div class="list-content" ref="listcontent">
         <ul>
@@ -47,6 +50,7 @@
       </div>
     </div>
     </transition>
+
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -140,10 +144,19 @@
       }
     },
     methods: {
+      pay() {
+        if (this.totalPrice < this.minprice) {
+          return;
+        }
+        window.alert(`支付${this.totalPrice}元`);
+      },
       toggleList() {
         if (!this.totalCount) {
           return;
         }
+        this.fold = !this.fold;
+      },
+      hideList() {
         this.fold = !this.fold;
       },
       drop(el) {
@@ -173,8 +186,6 @@
             let inner = el.getElementsByClassName('inner-hook')[0];
             inner.style.webkitTtansform = `translate3d(${x}px,0,0)`;
             inner.style.transform = `translate3d(${x}px,0,0)`;
-            // console.log(el.style.transform);
-            // console.log(inner.style.transform);
           }
         }
       },
@@ -197,6 +208,11 @@
           ball.show = false;
           el.style.display = 'none';
         }
+      },
+      empty() {
+        this.selectFoods.forEach((food) => {
+          food.count = 0;
+        });
       }
     },
     components: {
@@ -336,7 +352,6 @@
           float right
           font-size 12px
           color rgb(0,160,220)
-
       .list-content
         padding 0 18px
         max-height 217px
@@ -363,4 +378,16 @@
             position absolute
             right:6px
             bottom 6px
+    .list-mask
+      position fixed
+      top:0
+      left:0
+      width 100%
+      height: 100%
+      z-index -5
+      backdrop-filter blur(10px)
+      background rgba(7,17,27,0.6)
+      transition all 0.5s
+      &.fade-enter,&.fade-leave-active
+        background rgba(7,17,27,0)
 </style>

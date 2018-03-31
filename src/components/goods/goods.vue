@@ -40,6 +40,7 @@
     </div>
     <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"  ref="shopcart"></shopcart>
   </div>
+  <div></div>
 </template>
 <script type="text/ecmascript-6">
   import Bscroll from 'better-scroll';

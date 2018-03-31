@@ -29,6 +29,7 @@ module.exports = {
     'indent':0,
     'space-before-function-paren': 0,
     "no-whitespace-before-property": "off",
-    'vue/no-side-effects-in-computed-properties': 'off'
+    'vue/no-side-effects-in-computed-properties': 'off',
+    "no-trailing-spaces": "off"
   }
 };

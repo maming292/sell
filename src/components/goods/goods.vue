@@ -14,7 +14,7 @@
         <li v-for="(item ,id) in goods" :key="id" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px">
               <div class="icon">
                 <img :src="food.icon" width="57" height="57">
               </div>
@@ -39,13 +39,14 @@
       </ul>
     </div>
     <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"  ref="shopcart"></shopcart>
+    <food :food="selectedFood" ref="food"></food>
   </div>
-  <div></div>
 </template>
 <script type="text/ecmascript-6">
   import Bscroll from 'better-scroll';
   import shopcart from '../shopCart/shopCart';
-  import cartcontrol from '../cartControl/cartControl.vue';
+  import cartcontrol from '../cartControl/cartControl';
+  import food from '../food/food';
   const ERR_OK = 0;
   export default {
     props: {
@@ -57,7 +58,8 @@
      return {
        goods: [],
        listHeight: [],
-       scrollY: 0
+       scrollY: 0,
+       selectedFood: {}
      };
     },
     computed: {
@@ -110,6 +112,13 @@
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
       },
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
+      },
       _initScroll() {
         this.menuScroll = new Bscroll(this.$refs.menuWrapper, {
           click: true
@@ -135,7 +144,8 @@
     },
     components: {
       shopcart,
-      cartcontrol
+      cartcontrol,
+      food
     }
   };
 </script>
@@ -228,7 +238,7 @@
             font-size: 10px
             color: rgb(147,153,159)
           .extra
-            line-height:10px
+            line-height:12px
             font-size 10px
             color: rgb(147,153,159)
             & .count

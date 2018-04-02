@@ -198,8 +198,6 @@
           let inner = el.getElementsByClassName('inner-hook')[0];
           inner.style.webkitTtansform = 'translate3d(0,0,0)';
           inner.style.transform = 'translate3d(0,0,0)';
-          console.log(el.style.transform);
-          console.log(inner.style.transform);
         });
       },
       afterEnter(el) {

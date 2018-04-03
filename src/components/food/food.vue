@@ -63,6 +63,7 @@
         if (!event._constructed) {
           return;
         }
+        this.$emit('adds', event);
         Vue.set(this.food, 'count', 1);
       }
     },

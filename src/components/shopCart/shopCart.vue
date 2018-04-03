@@ -160,7 +160,6 @@
         this.fold = !this.fold;
       },
       drop(el) {
-//        console.log(el);
         for (let i = 0; i < this.balls.length; i++) {
           let ball = this.balls[i];
           if (!ball.show) {
@@ -175,6 +174,7 @@
         let count = this.balls.length;
         while (count--) {
           let ball = this.balls[count];
+          console.log(ball);
           if (ball.show) {
             //  getBoundingClientRect()  返回 left top right bottom
             let rect = ball.el.getBoundingClientRect();

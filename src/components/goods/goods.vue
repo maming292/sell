@@ -39,7 +39,7 @@
       </ul>
     </div>
     <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"  ref="shopcart"></shopcart>
-    <food :food="selectedFood" ref="food"></food>
+    <food :food="selectedFood" ref="food" @adds="drop"></food>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -101,7 +101,6 @@
     },
     methods: {
       drop(e) {
-//        console.log(this.$refs['shopcart']);
         this.$refs.shopcart.drop(e.target);
       },
       selectMenu(index, event) {

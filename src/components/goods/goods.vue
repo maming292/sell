@@ -87,7 +87,7 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
-      //              [减，折扣，担保，发票，特价]
+      //              [减，         折扣，       担保，        发票，      特价]
       this.$http.get('/api/goods').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {

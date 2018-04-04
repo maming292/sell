@@ -20,17 +20,16 @@
           </div>
         </div>
         <div class="cartcontrol-wrapper" v-show="food.count">
-          <cartcontrol :food="food"></cartcontrol>
+          <cartcontrol :food="food" @adds="drop"></cartcontrol>
         </div>
         <div @click="addFirst($event)" class="buy" v-show="!food.count || food.count ===0">加入购物车</div>
         </div>
       </div>
   </transition>
 </template>
-
 <script>
   import Bsroll from 'better-scroll';
-  import cartcontrol from '../cartControl/cartControl.vue';
+  import cartcontrol from '../cartControl/cartControl';
   import Vue from 'vue';
   export default {
     props: {
@@ -44,6 +43,9 @@
       };
     },
     methods: {
+      drop(e) {
+        this.$emit('adds', e);
+      },
       show() {
         this.showFlag = true;
         this.$nextTick(() => {

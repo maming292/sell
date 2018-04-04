@@ -174,7 +174,6 @@
         let count = this.balls.length;
         while (count--) {
           let ball = this.balls[count];
-          console.log(ball);
           if (ball.show) {
             //  getBoundingClientRect()  返回 left top right bottom
             let rect = ball.el.getBoundingClientRect();

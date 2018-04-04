@@ -14,8 +14,8 @@
         <li v-for="(item ,id) in goods" :key="id" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px">
-              <div class="icon" @click="selectFood(food,$event)" >
+            <li v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px" @click="selectFood(food,$event)">
+              <div class="icon" >
                 <img :src="food.icon" width="57" height="57">
               </div>
               <div class="content">
@@ -29,9 +29,9 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
-                <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food" @adds="drop"></cartcontrol>
-                </div>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food" @adds="drop"></cartcontrol>
               </div>
             </li>
           </ul>

@@ -1,7 +1,7 @@
 <template>
   <transition name="move">
-      <div v-show="showFlag" class="food" ref="food">
-        <div class="food-content">
+    <div v-show="showFlag" class="food" ref="food">
+      <div class="food-content">
         <div class="image-header">
           <img :src="food.image">
           <div class="back" @click="back">
@@ -18,19 +18,30 @@
             <span class="now">￥{{food.price}}</span>
             <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
           </div>
+          <div class="cartcontrol-wrapper" v-show="food.count">
+            <cartcontrol :food="food" @adds="drop"></cartcontrol>
+          </div>
+          <div @click="addFirst($event)" class="buy" v-show="!food.count || food.count ===0">加入购物车</div>
         </div>
-        <div class="cartcontrol-wrapper" v-show="food.count">
-          <cartcontrol :food="food" @adds="drop"></cartcontrol>
+        <split v-show="food.info"></split>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品信息</h1>
+          <p class="text">{{food.info}}</p>
         </div>
-        <div @click="addFirst($event)" class="buy" v-show="!food.count || food.count ===0">加入购物车</div>
+        <split></split>
+        <div class="rating">
+          <h1 class="ttle">商品评价</h1>
         </div>
       </div>
+    </div>
   </transition>
 </template>
 <script>
   import Bsroll from 'better-scroll';
   import cartcontrol from '../cartControl/cartControl';
   import Vue from 'vue';
+  import split from '../split/split';
+
   export default {
     props: {
       food: {
@@ -70,7 +81,8 @@
       }
     },
     components: {
-      cartcontrol
+      cartcontrol,
+      split
     }
   };
 </script>
@@ -109,6 +121,7 @@
           font-size 20px
           color #ffffff
     .content
+      position relative
       padding 18px
       .title
         line-height 14px
@@ -137,21 +150,33 @@
           text-decoration line-through
           font-size 10px
           color: rgb(147, 153, 159)
-    .cartcontrol-wrapper
-      position absolute
-      right 12px
-      bottom: 12px
-    .buy
-      position absolute
-      right:18px
-      bottom:18px
-      z-index 10
-      height 24px
-      line-height 24px
-      padding 0 12px
-      box-sizing border-box
-      border-radius 12px
-      font-size 10px
-      color #fff
-      background rgba(0,160,220,1)
+      .cartcontrol-wrapper
+        position absolute
+        right 12px
+        bottom: 12px
+      .buy
+        position absolute
+        right: 18px
+        bottom: 18px
+        z-index 10
+        height 24px
+        line-height 24px
+        padding 0 12px
+        box-sizing border-box
+        border-radius 12px
+        font-size 10px
+        color #fff
+        background rgba(0, 160, 220, 1)
+    .info
+      padding: 18px
+      .title
+        line-height 14px
+        margin-bottom: 6px
+        font-size 14px
+        color rgb(7,17,27)
+      .text
+        line-height 24px
+        font-size 12px
+        color rgb(77,85,93)
+        padding 0 8px
 </style>

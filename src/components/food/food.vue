@@ -31,7 +31,25 @@
         <split></split>
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
+          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc" :ratings="food.ratings"
+                        @changeType="changeType" @toggleContent="toggleContent"></ratingselect>
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li v-show="needshow(ratings.rateType,ratings.text)" v-for="(ratings,id) in food.ratings" :key="id"
+                  class="rating-item">
+                <div class="user">
+                  <span class="name">{{ratings.username}}</span>
+                  <img class="avatar" width="12" height="12" :src="ratings.avatar">
+                </div>
+                <div class="time">{{ratings.rateTime | formatDate}}</div>
+                <p class="text">
+                  <span
+                    :class="{'icon-thumb_up':ratings.rateType===0,'icon-thumb_down':ratings.rateType===1}"></span>{{ratings.text}}
+                </p>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length"><span>暂无评价</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -43,9 +61,7 @@
   import Vue from 'vue';
   import split from '../split/split';
   import ratingselect from '../ratingSelect/ratingSelect';
-
-  // const POSITIVE = 0;
-  // const NEGATIVE = 1;
+  import {formatDate} from '../../common/js/date';
   const ALL = 2;
 
   export default {
@@ -67,13 +83,30 @@
       };
     },
     methods: {
+      needshow(type, text) {
+        if (this.onlyContent && !text) {
+          return false;
+        }
+        if (this.selectType === ALL) {
+          return true;
+        } else {
+          return type === this.selectType;
+        }
+      },
+      changeType(e) {
+        this.selectType = e;
+        console.log(this.food);
+      },
+      toggleContent(content) {
+        this.onlyContent = content;
+      },
       drop(e) {
         this.$emit('adds', e);
       },
       show() {
         this.showFlag = true;
         this.selectType = ALL;
-        this.onlyContent = true;
+        this.onlyContent = false;
         this.$nextTick(() => {
           if (!this.scroll) {
             this.scroll = new Bsroll(this.$refs.food, {
@@ -95,6 +128,12 @@
         Vue.set(this.food, 'count', 1);
       }
     },
+    filter: {
+      formatDate(time) {
+        let date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd hh:mm');
+      }
+    },
     components: {
       cartcontrol,
       split,
@@ -103,6 +142,7 @@
   };
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixin.styl"
   .food
     position: fixed
     left: 0
@@ -189,11 +229,11 @@
         line-height 14px
         margin-bottom: 6px
         font-size 14px
-        color rgb(7,17,27)
+        color rgb(7, 17, 27)
       .text
         line-height 24px
         font-size 12px
-        color rgb(77,85,93)
+        color rgb(77, 85, 93)
         padding 0 8px
     .rating
       padding-top 18px
@@ -201,5 +241,47 @@
         line-height 14px
         margin-left 18px
         font-size 14px
-        color rgb(7,17,27)
+        color rgb(7, 17, 27)
+      .rating-wrapper
+        padding: 0 18px
+        .rating-item
+          position relative
+          padding: 16px 0
+          border-1px(rgba(7, 17, 27, 0.1))
+          .user
+            position absolute
+            right: 0
+            top: 16px
+            line-height 12px
+            font-size 0
+            .name
+              display inline-block
+              vertical-align top
+              margin-right 6px
+              font-size 10px
+              color rgb(147, 153, 159)
+            .avatar
+              border-radius 50%
+
+          .time
+            margin-bottom 6px
+            line-height 12px
+            font-size 10px
+            color rgb(147, 153, 159)
+          .text
+            line-height 16px
+            font-size 12px
+            color rgb(7, 17, 27)
+            .icon-thumb_up, .icon-thumb_down
+              line-height 16px
+              margin-right 4px
+              font-size 12px
+            .icon-thumb_up
+              color: rgb(6, 160, 220)
+            .icon-thumb_down
+              color rgb(147, 153, 159)
+        .no-rating
+          padding: 16px 0
+          font-size 12px
+          color rgb(147,153,159)
 </style>

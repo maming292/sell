@@ -95,7 +95,6 @@
       },
       changeType(e) {
         this.selectType = e;
-        console.log(this.food);
       },
       toggleContent(content) {
         this.onlyContent = content;

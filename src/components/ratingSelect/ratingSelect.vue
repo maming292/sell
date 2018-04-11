@@ -56,7 +56,6 @@
         if (!event._constructed) {
           return;
         }
-        console.log(this.toggle);
         this.toggle = !this.toggle;
         this.$emit('toggleContent', this.toggle);
       },

@@ -17,6 +17,11 @@
   const NEGATIVE = 1;
   const ALL = 2;
   export default {
+    data() {
+      return {
+        toggle: false
+      };
+    },
     props: {
       ratings: {
         type: Array,
@@ -51,6 +56,7 @@
         if (!event._constructed) {
           return;
         }
+        console.log(this.toggle);
         this.toggle = !this.toggle;
         this.$emit('toggleContent', this.toggle);
       },
@@ -59,6 +65,7 @@
           return;
         }
 //        this.selectType = e;
+        console.log(e);
         this.$emit('changeType', e);
       }
     },

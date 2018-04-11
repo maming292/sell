@@ -80,13 +80,8 @@
         }
       };
     },
-    created() {
-      this.$http.get('/api/ratings').then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.ratings = response.data;
-        }
-      });
+    mounted() {
+      // 页面整体滚动
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new Bsroll(this.$refs.ratings, {
@@ -94,6 +89,17 @@
           });
         } else {
           this.scroll.refresh();
+        }
+      });
+    },
+    created() {
+      this.$http.get('/api/ratings').then((response) => {
+        response = response.body;
+        if (response.errno === ERR_OK) {
+          this.ratings = response.data;
+          this.scroll = new Bsroll(this.$refs.ratings, {
+            click: true
+          });
         }
       });
     },
@@ -110,9 +116,15 @@
       },
       toggleContent(content) {
         this.onlyContent = content;
+        this.$nextTick(() => {
+          this.scroll.refresh();
+        });
       },
       changeType(e) {
         this.selectType = e;
+        this.$nextTick(() => {
+          this.scroll.refresh();
+        });
       }
     },
     components: {

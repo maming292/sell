@@ -97,8 +97,10 @@
         response = response.body;
         if (response.errno === ERR_OK) {
           this.ratings = response.data;
-          this.scroll = new Bsroll(this.$refs.ratings, {
-            click: true
+          this.$nextTick(() => {
+            this.scroll = new Bsroll(this.$refs.ratings, {
+              click: true
+            });
           });
         }
       });

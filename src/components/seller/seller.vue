@@ -28,6 +28,10 @@
             </div>
           </li>
         </ul>
+        <div class="favorite" @click.stop="toggles($event)">
+          <span class="icon-favorite" :class="{'active':favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
       <split></split>
       <div class="bulletin">
@@ -42,6 +46,24 @@
           </li>
         </ul>
       </div>
+      <split></split>
+      <div class="pics">
+        <h1 class="title">卖家实景</h1>
+        <div class="pic-wrapper" ref="picwrapper">
+          <ul class="pic-list" ref="piclist">
+            <li class="pic-item" v-for="(pic,id) in seller.pics" :key="id">
+              <img :src="pic" width="120px" height="90">
+            </li>
+          </ul>
+        </div>
+      </div>
+      <split></split>
+      <div class="info">
+        <h1 class="title">商家信息</h1>
+        <ul class="infos">
+          <li class="info-item" v-for="(info,id) in seller.infos" :key="id">{{info}}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +72,7 @@
   import star from '../../components/star/star';
   import split from '../../components/split/split';
   import Bscroll from 'better-scroll';
+  import {saveToLocal, loadFromLocal} from '../../common/js/store';
 
   export default {
     props: {
@@ -57,14 +80,69 @@
         type: Object
       }
     },
+    data() {
+      return {
+        pic: this.seller.pics,
+        favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false);
+        })()
+      };
+    },
     created() {
+      this.pic = this.seller.pics;
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+      this.$nextTick(() => {
+        this.scroll = new Bscroll(this.$refs.seller, {
+          // click: true
+        });
+      });
     },
     mounted() {
       // 页面整体滚动
-      this.scroll = new Bscroll(this.$refs.seller, {
-        click: true
+      this.$nextTick(() => {
+        this.scroll = new Bscroll(this.$refs.seller, {
+          click: true
+        });
       });
+      this._initPic();
+    },
+    methods: {
+      toggles(event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.favorite = !this.favorite;
+        saveToLocal(this.seller.id, 'favorite', this.favorite);
+      },
+      _initPic() {
+        if (this.seller.pics) {
+          let picWidth = 120;
+          let margin = 6;
+          let width = (picWidth + margin) * this.seller.pics.length - margin;
+          this.$refs.piclist.style.width = width + 'px';
+          this.$nextTick(() => {
+            this.picScroll = new Bscroll(this.$refs.picwrapper, {
+              scrollX: true,
+              eventPassthrough: 'vertical'
+            });
+          });
+        }
+      }
+    },
+    computed: {
+      favoriteText() {
+        return this.favorite ? '已收藏' : '收藏';
+      }
+    },
+    watch: {
+      'seller'() {
+        this.$nextTick(() => {
+          this.scroll = new Bscroll(this.$refs.seller, {
+            // click: true
+          });
+        });
+        this._initPic();
+      }
     },
     components: {
       star,
@@ -83,6 +161,7 @@
     width 100%
     overflow hidden
     .overview
+      position relative
       padding 18px
       .title
         margin-bottom 8px
@@ -123,6 +202,24 @@
             color rgb(7, 17, 27)
             .stress
               font-size 24px
+      .favorite
+        position absolute
+        width 50px
+        right 18px
+        top 18px
+        text-align center
+        .icon-favorite
+          display block
+          margin-bottom 4px
+          line-height 24px
+          font-size 24px
+          color: #d4d6d9
+          &.active
+            color: rgb(240, 20, 20)
+        .text
+          line-height 10px
+          font-size 10px
+          color rgb(77, 85, 93)
     .bulletin
       padding: 18px 18px 0
       .title
@@ -142,6 +239,8 @@
           padding: 16px 12px
           font-size 0px
           border-1px(rgba(7, 17, 27, 0.1))
+          &:last-child
+            border-none()
         .icon
           display inline-block
           vertical-align top
@@ -164,4 +263,39 @@
           line-height 16px
           font-size 12px
           color: rgb(7, 17, 27)
+    .pics
+      padding 18px
+      .title
+        margin-bottom 12px
+        line-height 14px
+        color rgb(7, 17, 27)
+        font-size 14px
+      .pic-wrapper
+        width 100%
+        overflow hidden
+        white-space nowrap
+        .pic-list
+          font-size 0
+          .pic-item
+            display inline-block
+            margin-right 6px
+            width 120px
+            height 90px
+            &:last-child
+              margin: 0
+    .info
+      padding 18px 18px 0
+      .title
+        margin-bottom 12px
+        line-height 14px
+        border-1px(rgba(7, 17, 27, 0.1))
+        color rgb(7, 17, 27)
+        font-size 14px
+      .info-item
+        padding 16px 12px
+        line-height: 16px
+        border-1px(rgba(7, 17, 27, 0.1))
+        font-size 12px
+        &:last-child
+          border-none()
 </style>

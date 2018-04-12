@@ -8,9 +8,9 @@ export function saveToLocal(id, key, value) {
     seller = JSON.parse(seller);
     if (!seller[id]) {
       seller[id] = {};
-      seller[id][key] = value;
     }
   }
+  seller[id][key] = value;
   window.localStorage._seller_ = JSON.stringify(seller);
 }
 

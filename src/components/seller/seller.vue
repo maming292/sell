@@ -112,6 +112,7 @@
           return;
         }
         this.favorite = !this.favorite;
+        console.log(this.favorite);
         saveToLocal(this.seller.id, 'favorite', this.favorite);
       },
       _initPic() {

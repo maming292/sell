@@ -61,7 +61,7 @@
   import {formatDate} from '../../common/js/date';
 
   const ALL = 2;
-  const ERR_OK = 0;
+  // const ERR_OK = 0;
   export default {
     props: {
       seller: {
@@ -93,16 +93,19 @@
       });
     },
     created() {
-      this.$http.get('/api/ratings').then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.ratings = response.data;
+      this.$http.jsonp('http://192.168.3.2/dist/data.php').then((response) => {
+        console.log(response.body);
+        // response = response.body.ratings;
+        if (response) {
+          this.ratings = response.body.ratings;
           this.$nextTick(() => {
             this.scroll = new Bsroll(this.$refs.ratings, {
               click: true
             });
           });
         }
+      }).catch((e) => {
+        console.log(e);
       });
     },
     methods: {

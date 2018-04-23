@@ -1,0 +1,2 @@
+build > webpack.dev.conf.js > L55~L65  使用的是跨域获取数据  的  代理方法
+                               context: ["/seller", "/rating",'/goods']  //定义的多个接口名称  效果都是返回相同数据，也可使用L56~L61 的写法，定义唯一的接口

@@ -2,7 +2,8 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="(item,id) in goods" :key="id" class="menu-item" :class="{'current':currentIndex === id}" @click="selectMenu(id, $event)">
+        <li v-for="(item,id) in goods" :key="id" class="menu-item" :class="{'current':currentIndex === id}"
+            @click="selectMenu(id, $event)">
           <span class="text">
            <span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span> {{item.name}}
           </span>
@@ -14,8 +15,9 @@
         <li v-for="(item ,id) in goods" :key="id" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px" @click="selectFood(food,$event)">
-              <div class="icon" >
+            <li v-for="(food ,id) in item.foods" :key="id" class="food-item border-1px"
+                @click="selectFood(food,$event)">
+              <div class="icon">
                 <img :src="food.icon" width="57" height="57">
               </div>
               <div class="content">
@@ -38,7 +40,8 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"  ref="shopcart"></shopcart>
+    <shopcart :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice" :select-foods="selectFoods"
+              ref="shopcart"></shopcart>
     <food :food="selectedFood" ref="food" @adds="drop"></food>
   </div>
 </template>
@@ -47,7 +50,8 @@
   import shopcart from '../shopCart/shopCart';
   import cartcontrol from '../cartControl/cartControl';
   import food from '../food/food';
-  const ERR_OK = 0;
+
+  // const ERR_OK = 0;
   export default {
     props: {
       seller: {
@@ -55,12 +59,12 @@
       }
     },
     data() {
-     return {
-       goods: [],
-       listHeight: [],
-       scrollY: 0,
-       selectedFood: {}
-     };
+      return {
+        goods: [],
+        listHeight: [],
+        scrollY: 0,
+        selectedFood: {}
+      };
     },
     computed: {
       selectFoods() {
@@ -77,7 +81,7 @@
       currentIndex() {
         for (let i = 0; i < this.listHeight.length; i++) {
           let height1 = this.listHeight[i];
-           let height2 = this.listHeight[i + 1];
+          let height2 = this.listHeight[i + 1];
           if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
             return i;
           }
@@ -88,15 +92,17 @@
     created() {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
       //              [减，         折扣，       担保，        发票，      特价]
-      this.$http.get('/api/goods').then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.goods = response.data;
+      this.$http.jsonp('http://192.168.3.2/dist/data.php').then((response) => {
+        console.log(response.body.goods);
+        if (response) {
+          this.goods = response.body.goods;
           this.$nextTick(() => {
             this._initScroll();
             this._calculateHeight();
           });
         }
+      }).catch((e) => {
+        console.log(e);
       });
     },
     methods: {
@@ -131,14 +137,14 @@
         });
       },
       _calculateHeight() {
-          let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
-          let height = 0;
+        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+        let height = 0;
+        this.listHeight.push(height);
+        for (let i = 0; i < foodList.length; i++) {
+          let item = foodList[i];
+          height += item.clientHeight;
           this.listHeight.push(height);
-          for (let i = 0; i < foodList.length; i++) {
-            let item = foodList[i];
-            height += item.clientHeight;
-            this.listHeight.push(height);
-          }
+        }
       }
     },
     components: {
@@ -163,10 +169,10 @@
       background #f3f5f7
       .menu-item
         display table
-        height:54px
-        width:56px
+        height: 54px
+        width: 56px
         line-height 14px
-        padding:0 12px
+        padding: 0 12px
         &.current
           position relative
           z-index 10px
@@ -195,9 +201,9 @@
             bg-image('special_3')
         .text
           display table-cell
-          width:56px
+          width: 56px
           vertical-align middle
-          border-1px(rgba(1,17,27,0.1))
+          border-1px(rgba(1, 17, 27, 0.1))
           font-size 12px
     .footer-wrapper
       flex 1
@@ -205,15 +211,15 @@
         padding-left 14px
         height: 26px
         line-height 26px
-        border-left:2px solid #d9dde1
+        border-left: 2px solid #d9dde1
         font-size 12px
-        color: rgba(147,153,159,1)
+        color: rgba(147, 153, 159, 1)
         background #f3f5f7
       .food-item
         display flex
         margin 18px
         padding-bottom 18px
-        border-1px(rgba(7,17,27,0.1))
+        border-1px(rgba(7, 17, 27, 0.1))
         &:last-child
           border-none()
           margin-bottom 0
@@ -224,22 +230,22 @@
           height: 57px
         .content
           position relative
-          flex:1
+          flex: 1
           .name
             margin: 2px 0 8px
             height: 14px
             line-height 14px
             font-size 14px
-            color: rgb(7,17,27)
+            color: rgb(7, 17, 27)
           .desc
             margin-bottom 8px
             line-height: 12px
             font-size: 10px
-            color: rgb(147,153,159)
+            color: rgb(147, 153, 159)
           .extra
-            line-height:12px
+            line-height: 12px
             font-size 10px
-            color: rgb(147,153,159)
+            color: rgb(147, 153, 159)
             & .count
               display inline-block
               margin-right 12px
@@ -249,11 +255,11 @@
             .now
               margin-right 8px
               font-size 14px
-              color: rgb(240,20,20)
+              color: rgb(240, 20, 20)
             .old
               text-decoration line-through
               font-size 10px
-              color: rgb(147,153,159)
+              color: rgb(147, 153, 159)
           .cartcontrol-wrapper
             position absolute
             right 0

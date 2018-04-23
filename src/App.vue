@@ -16,14 +16,13 @@
       <router-view :seller="seller">
       </router-view>
     </keep-alive>
-
   </div>
 </template>
 <script type="text/ecmascript-6">
   import headers from './components/header/header.vue';
   import {urlParse} from './common/js/util';
 
-  const ERR_OK = 0;
+  // const ERR_OK = 0;
   export default {
     data() {
       return {
@@ -36,11 +35,14 @@
       };
     },
     created() {
-      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
-        response = response.body;
-        if (response !== ERR_OK) {
-          this.seller = Object.assign({}, this.seller, response.data);
+      this.$http.jsonp('http://192.168.3.2/dist/data.php?id=' + this.seller.id).then((response) => {
+        response = response.body.seller;
+        if (response) {
+          // console.log(response);
+          this.seller = Object.assign({}, this.seller, response);
         }
+      }).catch((e) => {
+        console.log(e);
       });
     },
     components: {

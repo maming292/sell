@@ -11,15 +11,15 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 // todo 添加变量
-const express= require('express')
+const axios = require('axios')
+const express = require('express')
 const app = express()
-var appData = require('../data.json')
-var seller = appData.seller
-var goods = appData.goods
-var ratings = appData.ratings
-
-var apiRoutes = express.Router()
-app.use('/api',apiRoutes)
+// var appData = require('../data.json')
+// var seller = appData.seller
+// var goods = appData.goods
+// var ratings = appData.ratings
+// var apiRoutes = express.Router()
+// app.use('/api', apiRoutes)
 
 
 // TODO 以上添加变量
@@ -29,7 +29,7 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap, usePostCSS: true})
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
@@ -39,7 +39,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [
-        { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
+        {from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html')},
       ],
     },
     hot: true,
@@ -49,36 +49,58 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
     overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
+      ? {warnings: false, errors: true}
       : false,
     publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
+    // proxy: config.dev.proxyTable,
+    // proxy: {
+    //   "/api": {
+    //     target: "http://localhost/dist/data2.php",
+    //     secure: false
+    //   }
+    // },
+    proxy: [{
+      context: ["/seller", "/rating",'/goods'],
+      target: "http://192.168.3.2/dist/data2.php",
+    }],
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
     },
     // todo 添加变量before
-    before(app){
-      app.get('/api/seller',(req,res)=>{
-        res.json({
-          errno:0,
-          data:seller
-        })
-      }),
-        app.get('/api/goods',(req,res)=>{
-          res.json({
-            errno:0,
-            data:goods
-          })
-        }),
-        app.get('/api/ratings',(req,res)=>{
-          res.json({
-            errno:0,
-            data:ratings
-          })
-        })
+    before(app) {
+      // app.get('/api', ((req, res) => {   //  TODO 跨域请求 事件代理！！！！！！！！！！！！！！！！！
+      //   var url = 'http://localhost/dist/data.json';
+      //   axios.get(url, {
+      //     headers: {
+      //       referer: 'http://localhost/dist/data.json',
+      //       host: 'localhost/dist/data.json'
+      //     }
+      //   }).then((response) => {
+      //       res.json(response);
+      //   }).catch((e)=>{
+      //     console.log(e);
+      //   })
+      // }))
+        // app.get('/api/seller', (req, res) => {
+        //   res.json({
+        //     errno: 0,
+        //     data: seller
+        //   })
+        // }),
+        // app.get('/api/goods', (req, res) => {
+        //   res.json({
+        //     errno: 0,
+        //     data: goods
+        //   })
+        // }),
+        // app.get('/api/ratings', (req, res) => {
+        //   res.json({
+        //     errno: 0,
+        //     data: ratings
+        //   })
+        // })
     }
-
 // TODO 以上添加before
   },
   plugins: [
@@ -122,8 +144,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)
